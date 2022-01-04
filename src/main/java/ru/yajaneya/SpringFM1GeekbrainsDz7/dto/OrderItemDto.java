@@ -1,11 +1,13 @@
 package ru.yajaneya.SpringFM1GeekbrainsDz7.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDto {
     private Long productId;
     private String productTitle;

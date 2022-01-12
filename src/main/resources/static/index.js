@@ -107,6 +107,27 @@ angular.module('webapp', ['ngStorage']).controller('indexController', function($
             });
     };
 
+    $scope.createOrder = function () {
+        $http({
+            url: contextPath + '/api/v1/orders',
+            method: 'POST',
+            params: {
+                address: "Адрес доставки",
+                phone: "Телефон получателя"
+           }
+           }).then(function successCallback(response) {
+                alert('Заказ сформирован ');
+            }, function errorCallback(response) {
+                if (response.status == 401) {
+                   alert("Авторизируйтесь для оформления заказа");
+                } else if (response.status == 400) {
+                   alert("Корзина пуста");
+                } else {
+                   alert("Не удалось оформить заказ");
+                }
+            });
+    };
+
     $scope.loadProducts();
     $scope.loadCart();
 

@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html ng-app="webapp">
+<html ng-app="market-front">
 
 <head>
     <meta charset="utf-8">
@@ -12,17 +12,25 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js"></script>
-    <script src="index.js"></script>
-
-    <title>Продукты</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-route.min.js"></script>
 </head>
+
 <body>
 
 <div class="container" ng-controller="indexController">
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/">Spring Web Application</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/store">Каталог товаров</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#!/cart">Корзина</a>
+                </li>
+
                 <li class="nav-item" ng-show="!isUserLoggedIn()">
                     <form class="align-middle" ng-submit="tryToAuth()">
                         <div class="input-group input-group-sm" style="padding: 4px;">
@@ -37,20 +45,6 @@
                             </button>
                         </div>
                     </form>
-
-                    <form class="align-middle" ng-submit="tryToReg()">
-                        <div class="input-group input-group-sm" style="padding: 4px;">
-                            <input id="navLoginFieldReg" class="form-control" ng-model="regUser.username" type="text"
-                                   aria-describedby="inputGroup-sizing-sm" style="margin-left: 10px;">
-
-                            <input id="navPasswordFieldReg" class="form-control" ng-model="regUser.password" type="password"
-                                   aria-describedby="inputGroup-sizing-sm" style="margin-left: 10px;">
-
-                            <button id="navRegSubmit" class="btn btn-outline-warning btn-sm"
-                                    style="margin-left: 10px;" type="submit">Зарегистрироваться
-                            </button>
-                        </div>
-                    </form>
                 </li>
                 <li class="nav-item" ng-show="isUserLoggedIn()" style="padding: 4px;">
                     <button class="btn btn-outline-secondary btn-sm" ng-click="tryToLogout()">Выйти</button>
@@ -59,88 +53,13 @@
         </div>
     </nav>
 
-    <h3>Товары</h3>
+    <ng-view></ng-view>
 
-    <h5>Поиск по минимальной и/или максимальной цене</h5>
-
-    <form ng-submit="loadProducts()">
-
-        <table class="table table-hover">
-            <tr>
-                <td>Мин. цена</td>
-                <td>
-                    <input class="form-control" type="number" placeholder="Минимум" ng-model="min_price">
-                </td>
-                <td>Макс. цена</td>
-                <td>
-                    <input class="form-control" type="number" placeholder="Максимум" ng-model="max_price">
-                </td>
-                <td>
-                    <button type="submit" class="btn btn-primary">Отобразить</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Номер страницы</td>
-                <td>
-                    <input class="form-control" type="number" placeholder="Страница" ng-model="page">
-                </td>
-            </tr>
-        </table>
-    </form>
-
-    <h5>Список товаров</h5>
-
-    <table class="table table-hover">
-        <tr>
-            <td>Id</td>
-            <td>Наименование</td>
-            <td>Цена</td>
-            <td></td>
-        </tr>
-        <tbody>
-        <tr ng-repeat="prod in ProductsList">
-            <td>{{prod.id}}</td>
-            <td>{{prod.title}}</td>
-            <td>{{prod.price}}</td>
-            <td>
-                <button class="btn btn-primary" ng-click="addToCart(prod.id)">В корзину-></button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <h5>Корзина, однако</h5>
-    <table class="table table-hover">
-        <tr>
-            <td>Навание товара</td>
-            <td>Количество</td>
-            <td>Цена</td>
-        </tr>
-        <tbody>
-        <tr ng-repeat="item in Cart.items">
-            <td>{{item.productTitle}}</td>
-            <td>{{item.quantity}}</td>
-            <td>{{item.pricePerProduct + ' x ' + item.quantity + ' = ' + item.price}}</td>
-       </tr>
-        <tr>
-            <td></td>
-            <td>Итого</td>
-            <td>{{Cart.totalPrice}}</td>
-        </tr>
-        </tbody>
-    </table>
-
-    <p>
-        <button class="btn btn-secondary" ng-click="clearCart()">Очистить корзину</button>
-        <button class="btn btn-primary" ng-click="createOrder()">Оформить заказ</button>
-    </p>
-
-    <p>
-        <button class="btn btn-danger" ng-click="showCurrentUserInfo()">Обо мне</button>
-    </p>
-
+    <script src="index.js"></script>
+    <script src="store/store.js"></script>
+    <script src="cart/cart.js"></script>
+    <script src="welcome/welcome.js"></script>
 </div>
 
 </body>
-
 </html>

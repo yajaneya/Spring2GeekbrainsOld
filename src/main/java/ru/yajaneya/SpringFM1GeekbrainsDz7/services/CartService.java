@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 @Service
 @RequiredArgsConstructor
 public class CartService {
-    private final ProductService productService;
+    private final ProductsService productsService;
     private Cart cart;
 
     @PostConstruct
@@ -25,7 +25,7 @@ public class CartService {
 
     public void addProductByIdToCart(Long productId) {
         if (!getCurrentCart().addProduct(productId)) {
-            Product product = productService.findByID(productId)
+            Product product = productsService.findByID(productId)
                     .orElseThrow(() -> new ResourceNotFoundException
                             ("Невозможно добавить продукт в корзину. Продукт не найденб id: " + productId));
             getCurrentCart().addProduct(product);

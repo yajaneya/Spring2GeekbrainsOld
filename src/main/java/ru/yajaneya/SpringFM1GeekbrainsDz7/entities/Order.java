@@ -2,8 +2,12 @@ package ru.yajaneya.SpringFM1GeekbrainsDz7.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,6 +23,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<OrderItem> items;
+
     @Column(name = "total_price")
     private int totalPrice;
 
@@ -27,4 +34,12 @@ public class Order {
 
     @Column(name = "phone")
     private  String phone;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

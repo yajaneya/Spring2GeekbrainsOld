@@ -1,13 +1,36 @@
-angular.module('webapp', ['ngStorage']).controller('indexController', function($scope, $rootScope, $http, $localStorage) {
-    const contextPath = 'http://localhost:8189/app';
+(function () {
+    angular
+        .module('market-front', ['ngRoute', 'ngStorage'])
+        .config(config)
+        .run(run);
 
-    $scope.page = 1;
-    $scope.sum = 0;
-
-    if ($localStorage.springWebUser) {
-        $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
+    function config($routeProvider) {
+        $routeProvider
+            .when('/', {
+                templateUrl: 'welcome/welcome.html',
+                controller: 'welcomeController'
+            })
+            .when('/store', {
+                templateUrl: 'store/store.html',
+                controller: 'storeController'
+            })
+            .when('/cart', {
+                templateUrl: 'cart/cart.html',
+                controller: 'cartController'
+            })
+            .otherwise({
+                redirectTo: '/'
+            });
     }
 
+    function run($rootScope, $http, $localStorage) {
+        if ($localStorage.springWebUser) {
+            $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
+        }
+    }
+})();
+
+angular.module('market-front').controller('indexController', function ($rootScope, $scope, $http, $location, $localStorage) {
     $scope.tryToAuth = function () {
         $http.post('http://localhost:8189/app/auth', $scope.user)
             .then(function successCallback(response) {
@@ -17,33 +40,17 @@ angular.module('webapp', ['ngStorage']).controller('indexController', function($
 
                     $scope.user.username = null;
                     $scope.user.password = null;
+
+                    $location.path('/');
                 }
             }, function errorCallback(response) {
             });
     };
 
-    $scope.tryToReg = function () {
-        $http.post('http://localhost:8189/app/reg', $scope.regUser)
-            .then(function successCallback(response) {
-                if (response.data.token) {
-                    $http.defaults.headers.common.Authorization = 'Bearer ' + response.data.token;
-                    $localStorage.springWebUser = {username: $scope.regUser.username, token: response.data.token};
-
-                    $scope.regUser.username = null;
-                    $scope.regUser.password = null;
-                }
-            }, function errorCallback(response) {
-           });
-    };
-
     $scope.tryToLogout = function () {
         $scope.clearUser();
-        if ($scope.user.username) {
-            $scope.user.username = null;
-        }
-        if ($scope.user.password) {
-            $scope.user.password = null;
-        }
+        $scope.user = null;
+        $location.path('/');
     };
 
     $scope.clearUser = function () {
@@ -58,77 +65,4 @@ angular.module('webapp', ['ngStorage']).controller('indexController', function($
             return false;
         }
     };
-
-    $scope.showCurrentUserInfo = function () {
-        $http.get('http://localhost:8189/app/api/v1/profile')
-            .then(function successCallback(response) {
-                alert('MY NAME IS: ' + response.data.username);
-            }, function errorCallback(response) {
-                alert('UNAUTHORIZED');
-            });
-    };
-
-    $scope.loadProducts = function () {
-
-        $http({
-            url: contextPath + '/api/v1/products/',
-            method: 'GET',
-            params: {
-                min_price: $scope.min_price,
-                max_price: $scope.max_price,
-                page: $scope.page
-            }
-        }).then(function (response) {
-           $scope.page = response.data.pageable.pageNumber + 1;
-           $scope.ProductsList = response.data.content;
-        });
-    };
-
-    $scope.loadCart = function () {
-        $http({
-            url: contextPath + '/api/v1/carts/',
-            method: 'GET',
-        }).then(function (response) {
-           $scope.Cart = response.data;
-        });
-    };
-
-    $scope.addToCart = function (prodId) {
-       $http.get(contextPath + '/api/v1/carts/add/' + prodId)
-            .then(function (response) {
-                $scope.loadCart();
-            });
-    };
-
-    $scope.clearCart = function () {
-       $http.get(contextPath + '/api/v1/carts/clear')
-            .then(function (response) {
-                $scope.loadCart();
-            });
-    };
-
-    $scope.createOrder = function () {
-        $http({
-            url: contextPath + '/api/v1/orders',
-            method: 'POST',
-            params: {
-                address: "Адрес доставки",
-                phone: "Телефон получателя"
-           }
-           }).then(function successCallback(response) {
-                alert('Заказ сформирован ');
-            }, function errorCallback(response) {
-                if (response.status == 401) {
-                   alert("Авторизируйтесь для оформления заказа");
-                } else if (response.status == 400) {
-                   alert("Корзина пуста");
-                } else {
-                   alert("Не удалось оформить заказ");
-                }
-            });
-    };
-
-    $scope.loadProducts();
-    $scope.loadCart();
-
 });

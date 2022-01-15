@@ -3,7 +3,7 @@ package ru.yajaneya.SpringFM1GeekbrainsDz7.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.ProfileDto;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.ProfileDto;
 
 import java.security.Principal;
 

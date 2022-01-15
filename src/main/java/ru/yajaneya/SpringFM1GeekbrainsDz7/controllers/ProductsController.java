@@ -8,15 +8,15 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.converters.ProductConverter;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.ProductDto;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.services.ProductService;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.services.ProductsService;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.validators.ProductValidator;
 
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductsController {
 
-    private final ProductService productService;
+    private final ProductsService productsService;
     private final ProductConverter productConverter;
     private final ProductValidator productValidator;
 
@@ -29,18 +29,18 @@ public class ProductController {
         if (page < 1) {
             page=1;
         }
-        int totalPages = productService.findAll(minPrice, maxPrice, page).getTotalPages();
+        int totalPages = productsService.findAll(minPrice, maxPrice, page).getTotalPages();
         if (page > totalPages) {
             page = totalPages;
         }
 
-        return productService.findAll(minPrice, maxPrice, page)
+        return productsService.findAll(minPrice, maxPrice, page)
                 .map(productConverter::entityToDto);
     }
 
     @GetMapping("/{id}")
     public ProductDto getProductById (@PathVariable Long id) {
-        Product product = productService.findByID(id)
+        Product product = productsService.findByID(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Продукт с id = " + id + " не найден."));
         return productConverter.entityToDto(product);
     }
@@ -50,20 +50,20 @@ public class ProductController {
         productValidator.validate(productDto);
         Product product = productConverter.dtoToEntity(productDto);
         product.setId(null);
-        product = productService.save(product);
+        product = productsService.save(product);
         return productConverter.entityToDto(product);
     }
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
-        Product product = productService.update(productDto);
+        Product product = productsService.update(productDto);
         return productConverter.entityToDto(product);
     }
 
     @DeleteMapping("/{id}")
     public void delProduct (@PathVariable Long id) {
-        productService.deleteById(id);
+        productsService.deleteById(id);
     }
 
 }

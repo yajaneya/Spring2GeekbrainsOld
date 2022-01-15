@@ -8,7 +8,7 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.ProductDto;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import org.springframework.stereotype.Service;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.ProductRepository;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.ProductsRepository;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications.ProductSpecifications;
 
 import javax.transaction.Transactional;
@@ -16,9 +16,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductsService {
 
-    private final ProductRepository productRepository;
+    private final ProductsRepository productsRepository;
 
     public Page<Product> findAll(Integer minPrice, Integer maxPrice, Integer page) {
 
@@ -31,15 +31,15 @@ public class ProductService {
         if (maxPrice != null) {
             spec = spec.and(ProductSpecifications.priceLessOrEqualsThan(maxPrice));
         }
-        return productRepository.findAll(spec, PageRequest.of(page - 1, 5));
+        return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }
 
     public Optional<Product> findByID (Long id) {
-        return productRepository.findById(id);
+        return productsRepository.findById(id);
     }
 
     public Product save (Product product) {
-        return productRepository.save(product);
+        return productsRepository.save(product);
     }
 
     @Transactional
@@ -54,7 +54,7 @@ public class ProductService {
 
 
     public void deleteById(Long id) {
-        productRepository.deleteById(id);
+        productsRepository.deleteById(id);
     }
 
 }

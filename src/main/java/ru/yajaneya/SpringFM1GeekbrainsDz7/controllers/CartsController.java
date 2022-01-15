@@ -6,9 +6,9 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.Cart;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.services.CartService;
 
 @RestController
-@RequestMapping("/api/v1/carts")
+@RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
-public class CartController {
+public class CartsController {
     private final CartService cartService;
 
     @GetMapping

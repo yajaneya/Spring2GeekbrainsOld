@@ -1,4 +1,4 @@
-package ru.yajaneya.SpringFM1GeekbrainsDz7.entities;
+package ru.yajaneya.SpringFM1GeekbrainsDz7.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

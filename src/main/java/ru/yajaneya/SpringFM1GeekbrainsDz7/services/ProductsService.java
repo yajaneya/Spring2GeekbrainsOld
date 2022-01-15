@@ -9,7 +9,7 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import org.springframework.stereotype.Service;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.ProductsRepository;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications.ProductSpecifications;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications.ProductsSpecifications;
 
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -20,18 +20,19 @@ public class ProductsService {
 
     private final ProductsRepository productsRepository;
 
-    public Page<Product> findAll(Integer minPrice, Integer maxPrice, Integer page) {
-
+    public Page<Product> findAll(Integer minPrice, Integer maxPrice, String partTitle, Integer page) {
         Specification<Product> spec = Specification.where(null);
-
         if (minPrice != null) {
-            spec = spec.and(ProductSpecifications.priceGreaterOrEqualsThan(minPrice));
+            spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
+        }
+        if (maxPrice != null) {
+            spec = spec.and(ProductsSpecifications.priceLessThanOrEqualsThan(maxPrice));
+        }
+        if (partTitle != null) {
+            spec = spec.and(ProductsSpecifications.titleLike(partTitle));
         }
 
-        if (maxPrice != null) {
-            spec = spec.and(ProductSpecifications.priceLessOrEqualsThan(maxPrice));
-        }
-        return productsRepository.findAll(spec, PageRequest.of(page - 1, 5));
+        return productsRepository.findAll(spec, PageRequest.of(page - 1, 8));
     }
 
     public Optional<Product> findByID (Long id) {

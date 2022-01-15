@@ -21,21 +21,18 @@ public class ProductsController {
     private final ProductValidator productValidator;
 
     @GetMapping
-    public Page<ProductDto> getProducts
-            (@RequestParam (defaultValue = "1") Integer page,
-             @RequestParam (name = "min_price", required = false) Integer minPrice,
-             @RequestParam (name = "max_price", required = false) Integer maxPrice) {
-
+    public Page<ProductDto> getProducts(
+    @RequestParam(name = "p", defaultValue = "1") Integer page,
+    @RequestParam(name = "min_price", required = false) Integer minPrice,
+    @RequestParam(name = "max_price", required = false) Integer maxPrice,
+    @RequestParam(name = "title_part", required = false) String titlePart
+    ) {
         if (page < 1) {
-            page=1;
+            page = 1;
         }
-        int totalPages = productsService.findAll(minPrice, maxPrice, page).getTotalPages();
-        if (page > totalPages) {
-            page = totalPages;
-        }
-
-        return productsService.findAll(minPrice, maxPrice, page)
-                .map(productConverter::entityToDto);
+        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
+                p -> productConverter.entityToDto(p)
+        );
     }
 
     @GetMapping("/{id}")

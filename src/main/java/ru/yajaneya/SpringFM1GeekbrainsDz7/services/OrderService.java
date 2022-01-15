@@ -12,7 +12,6 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.OrdersRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,21 +21,10 @@ public class OrderService {
     private final CartService cartService;
     private final ProductsService productsService;
 
-    public List<Order> findAll () {
-        return ordersRepository.findAll();
-    }
-
-    public Optional<Order> findByID (Long id) {
-        return ordersRepository.findById(id);
-    }
-
-    public Order save (Order order) {
-        return ordersRepository.save(order);
-    }
-
     @Transactional
     public void createOrder(User user, OrderDetailsDto orderDetailsDto) {
-        Cart currentCart = cartService.getCurrentCart();
+        String cartKey = cartService.getCartUuidFromSuffix(user.getUsername());
+        Cart currentCart = cartService.getCurrentCart(cartKey);
         Order order = new Order();
         order.setAddress(orderDetailsDto.getAddress());
         order.setPhone(orderDetailsDto.getPhone());
@@ -54,11 +42,10 @@ public class OrderService {
                 }).collect(Collectors.toList());
         order.setItems(items);
         ordersRepository.save(order);
-        currentCart.clear();
+        cartService.clearCart(cartKey);
     }
 
     public List<Order> findOrdersByUsername(String username) {
         return ordersRepository.findAllByUsername(username);
     }
-
 }

@@ -30,9 +30,14 @@ public class ProductsController {
         if (page < 1) {
             page = 1;
         }
-        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
+
+        Page<ProductDto> out = productsService.findAll(minPrice, maxPrice, titlePart, page).map(
                 p -> productConverter.entityToDto(p)
         );
+
+        System.out.println(out);
+
+        return out;
     }
 
     @GetMapping("/{id}")

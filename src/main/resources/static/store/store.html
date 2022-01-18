@@ -7,6 +7,11 @@
         <div class="col-6 col-md-2">
             <form novalidate ng-submit="loadProducts()">
                 <div class="form-floating input-group-sm">
+                    <input type="text" class="form-control" id="filterCategory" placeholder="" ng-model="filter.categoryName">
+                    <label for="filterCategory">Категория</label>
+                </div>
+                <p></p>
+                <div class="form-floating input-group-sm">
                     <input type="text" class="form-control" id="filterTitle" placeholder="" ng-model="filter.title_part">
                     <label for="filterTitle">Название продукта</label>
                 </div>
@@ -30,6 +35,7 @@
                     <td>ID</td>
                     <td>Название</td>
                     <td>Цена</td>
+                    <td>Категория</td>
                     <td></td>
                 </tr>
                 <tbody>
@@ -37,6 +43,7 @@
                     <td>{{p.id}}</td>
                     <td>{{p.title}}</td>
                     <td>{{p.price}}</td>
+                    <td>{{p.category}}</td>
                     <td>
                         <button class="btn btn-primary" ng-click="addToCart(p.id)">Добавить в корзину</button>
                     </td>

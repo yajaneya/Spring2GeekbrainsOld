@@ -1,6 +1,7 @@
 package ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Category;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 
 public class ProductsSpecifications {
@@ -18,4 +19,11 @@ public class ProductsSpecifications {
         return (root, criteriaQuery, criteriaBuilder)
                 -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", titlePart));
     }
+
+    public static Specification<Product> categoryEqual(String categoryNameFilter) {
+        System.out.println("Категория для фильтра: '" + categoryNameFilter + "'");
+        return (root, criteriaQuery, criteriaBuilder)
+                -> criteriaBuilder.equal(root.get("category").get("categoryName"), categoryNameFilter);
+    }
+
 }

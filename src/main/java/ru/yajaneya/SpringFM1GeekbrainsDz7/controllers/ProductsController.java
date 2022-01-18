@@ -8,6 +8,7 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.converters.ProductConverter;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.ProductDto;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.services.CategoriesService;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.services.ProductsService;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.validators.ProductValidator;
 
@@ -17,6 +18,7 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.validators.ProductValidator;
 public class ProductsController {
 
     private final ProductsService productsService;
+    private final CategoriesService categoriesService;
     private final ProductConverter productConverter;
     private final ProductValidator productValidator;
 
@@ -25,14 +27,21 @@ public class ProductsController {
     @RequestParam(name = "p", defaultValue = "1") Integer page,
     @RequestParam(name = "min_price", required = false) Integer minPrice,
     @RequestParam(name = "max_price", required = false) Integer maxPrice,
+    @RequestParam(name = "categoryName", required = false) String categoryName,
     @RequestParam(name = "title_part", required = false) String titlePart
     ) {
         if (page < 1) {
             page = 1;
         }
-        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
-                p -> productConverter.entityToDto(p)
+
+        Page<ProductDto> out = productsService.findAll(minPrice, maxPrice, titlePart,
+                categoryName, page).
+                    map(p -> productConverter.entityToDto(p)
         );
+
+        System.out.println(out);
+
+        return out;
     }
 
     @GetMapping("/{id}")

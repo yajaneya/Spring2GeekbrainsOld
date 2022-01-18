@@ -20,9 +20,10 @@ public class ProductsSpecifications {
                 -> criteriaBuilder.like(root.get("title"), String.format("%%%s%%", titlePart));
     }
 
-    public static Specification<Product> categoryEqual(Category category) {
+    public static Specification<Product> categoryEqual(String categoryNameFilter) {
+        System.out.println("Категория для фильтра: '" + categoryNameFilter + "'");
         return (root, criteriaQuery, criteriaBuilder)
-                -> criteriaBuilder.equal(root.get("category"), category);
+                -> criteriaBuilder.equal(root.get("category").get("categoryName"), categoryNameFilter);
     }
 
 }

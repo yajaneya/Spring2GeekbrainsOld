@@ -35,7 +35,7 @@ public class ProductsController {
         }
 
         Page<ProductDto> out = productsService.findAll(minPrice, maxPrice, titlePart,
-                categoriesService.findByCategoryName(categoryName).orElse(null), page).
+                categoryName, page).
                     map(p -> productConverter.entityToDto(p)
         );
 

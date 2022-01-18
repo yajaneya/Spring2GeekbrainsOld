@@ -25,7 +25,7 @@ public class ProductsService {
             Integer minPrice,
             Integer maxPrice,
             String partTitle,
-            Category category,
+            String categoryName,
             Integer page) {
 
         Specification<Product> spec = Specification.where(null);
@@ -39,8 +39,10 @@ public class ProductsService {
         if (partTitle != null) {
             spec = spec.and(ProductsSpecifications.titleLike(partTitle));
         }
-        if (category != null) {
-            spec = spec.and(ProductsSpecifications.categoryEqual(category));
+        if (categoryName != null) {
+            if (!categoryName.equals("")) {
+                spec = spec.and(ProductsSpecifications.categoryEqual(categoryName));
+            }
         }
 
         return productsRepository.findAll(spec, PageRequest.of(page - 1, 8));

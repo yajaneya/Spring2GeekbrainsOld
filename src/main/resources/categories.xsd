@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://www.yajaneya.ru/SpringFM1GeekbrainsDz7/categories"
+        xmlns:st="http://www.yajaneya.ru/SpringFM1GeekbrainsDz7/products"
+        targetNamespace="http://www.yajaneya.ru/SpringFM1GeekbrainsDz7/categories" elementFormDefault="qualified">
+
+    <xs:import schemaLocation="products.xsd" namespace="http://www.yajaneya.ru/SpringFM1GeekbrainsDz7/products"/>
+
+    <xs:element name="getCategoryByCategoryNameRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="categoryName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getCategoryByCategoryNameResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="category" type="tns:categorySoap"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="categorySoap">
+        <xs:sequence>
+            <xs:element name="categoryName" type="xs:string"/>
+            <xs:element name="products" maxOccurs="unbounded" type="st:productSoap"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

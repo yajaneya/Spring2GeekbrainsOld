@@ -8,7 +8,6 @@ import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.Cart;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
 
-import javax.annotation.PostConstruct;
 import java.util.UUID;
 import java.util.function.Consumer;
 

@@ -1,7 +1,6 @@
 package ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Category;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 
 public class ProductsSpecifications {

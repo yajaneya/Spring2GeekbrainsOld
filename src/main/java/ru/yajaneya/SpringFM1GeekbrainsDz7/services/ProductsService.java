@@ -5,15 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.dto.ProductDto;
-import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Category;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.entities.Product;
 import org.springframework.stereotype.Service;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions.ResourceNotFoundException;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.ProductsRepository;
 import ru.yajaneya.SpringFM1GeekbrainsDz7.repositories.specifications.ProductsSpecifications;
+import ru.yajaneya.SpringFM1GeekbrainsDz7.soap.products.ProductSoap;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,6 +73,26 @@ public class ProductsService {
 
     public void deleteById(Long id) {
         productsRepository.deleteById(id);
+    }
+
+//    SOAP
+    public static final Function<Product, ProductSoap> functionEntityToSoap = p -> {
+        ProductSoap pS = new ProductSoap();
+        pS.setId(p.getId());
+        pS.setTitle(p.getTitle());
+        pS.setPrice(p.getPrice());
+        pS.setCategoryTitle(p.getCategory().getCategoryName());
+        return pS;
+    };
+
+    //    SOAP
+    public List<ProductSoap> getAllProducts() {
+        return productsRepository.findAll().stream().map(functionEntityToSoap).collect(Collectors.toList());
+    }
+
+    //    SOAP
+    public ProductSoap getById(Long id) {
+        return productsRepository.findById(id).map(functionEntityToSoap).get();
     }
 
 }

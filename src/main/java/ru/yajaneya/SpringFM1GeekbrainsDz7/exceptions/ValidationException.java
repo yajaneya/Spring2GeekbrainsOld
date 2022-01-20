@@ -1,7 +1,6 @@
 package ru.yajaneya.SpringFM1GeekbrainsDz7.exceptions;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
